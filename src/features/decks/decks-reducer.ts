@@ -1,4 +1,4 @@
-import type { Deck, FetchDecksResponse } from './decks-api.ts'
+import type { Deck } from './decks-api.ts'
 
 const initialState = {
   decks: [] as Deck[],
@@ -13,18 +13,21 @@ export const decksReducer = (state: DecksState = initialState, action: DecksActi
   switch (action.type) {
     case 'SET_DECKS':
       return { ...state, decks: action.payload }
+    case 'ADD_DECK':
+      return { ...state, decks: [{ ...action.payload, isFavorite: false }, ...state.decks] }
     default:
       return state
   }
 }
 
-// export const getDecksAC = (decks: FetchDecksResponse) => {
-//   return { type: 'GET_DECKS' } as const
-// }
 export const setDecksAC = (decks: Deck[]) => {
   return { type: 'SET_DECKS', payload: decks } as const
 }
 
-// type GetDecksActionType = ReturnType<typeof getDecksAC>
+export const addDeckAC = (deck: Deck) => {
+  return { type: 'ADD_DECK', payload: deck } as const
+}
+
 type SetDecksActionType = ReturnType<typeof setDecksAC>
-type DecksActions = SetDecksActionType
+type AddDeckActionType = ReturnType<typeof addDeckAC>
+type DecksActions = SetDecksActionType | AddDeckActionType

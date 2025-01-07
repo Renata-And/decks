@@ -1,5 +1,4 @@
 import axios from 'axios'
-import type { decksReducer } from './decks-reducer.ts'
 
 export const instance = axios.create({
   baseURL: 'https://api.flashcards.andrii.es',
@@ -11,7 +10,14 @@ export const instance = axios.create({
 export const decksApi = {
   getDesks() {
     return instance.get<FetchDecksResponse>('/v2/decks')
+  },
+  addDeck(params: AddDeckParams) {
+    return instance.post<Deck>('/v1/decks', params)
   }
+}
+
+export type AddDeckParams = {
+  name: string
 }
 
 export type FetchDecksResponse = {
@@ -19,9 +25,8 @@ export type FetchDecksResponse = {
   pagination: Pagination
 }
 
+
 export type Deck = {
-  isFavorite: boolean
-  author: Author
   id: string
   userId: string
   name: string
@@ -30,6 +35,8 @@ export type Deck = {
   created: string
   updated: string
   cardsCount: number
+  author: Author
+  isFavorite: boolean
 }
 
 export type Author = {
